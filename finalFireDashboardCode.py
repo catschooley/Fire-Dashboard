@@ -35,7 +35,6 @@ fireLayerLocation = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/s
 coalLayerLocation = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/Coalpermit/FeatureServer/0"
 mineralLayerLocation = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/vwMineralsPermitsSurvey123/FeatureServer/0"
 oilgasLayerLocation = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/viewAGRC_WellData_Surf/FeatureServer/0"
-amrLayerLocation = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/viewAGRC_AMR/FeatureServer/0"
 
 # ======================================== Output Shapefile Locations =====================================
 
@@ -45,12 +44,10 @@ fireBuffers = folderPath + "\\fireBuffers"
 coalLocations = folderPath + "\\coalLocations"
 mineralLocations = folderPath + "\\mineralLocations"
 oilGasLocations = folderPath + "\\oilGasLocations"
-amrLocations = folderPath + "\\amrLocations"
 
 coalJoined = folderPath + "\\coalJoined"
 mineralJoined = folderPath + "\\mineralJoined"
 oilGasJoined = folderPath + "\\oilGasJoined"
-amrJoined = folderPath + "\\amrJoined"
 
 # ======================================== Output Hosted Feature Layers ===================================
 
@@ -58,7 +55,6 @@ fireBuffersItemId = "4c9a54f53ca1404597b590d1d37873ee"
 coalJoinedItemId = "ca42728a00ee421f88e2585b201edb3f"
 mineralJoinedItemId = "d0c45ddee4624854b3a7bacfd6a12b10"
 oilGasJoinedItemId = "d0b88683ea294d55bd39af95ae25f9c0"
-amrJoinedItemId = "0ceef6b8862143cf804fd4931badd1ea"
 
 # ======================================== Output Shapefile Locations =====================================
 
@@ -68,12 +64,10 @@ fireBuffers = folderPath + "\\fireBuffers"
 coalLocations = folderPath + "\\coalLocations"
 mineralLocations = folderPath + "\\mineralLocations"
 oilGasLocations = folderPath + "\\oilGasLocations"
-amrLocations = folderPath + "\\amrLocations"
 
 coalJoined = folderPath + "\\coalJoined"
 mineralJoined = folderPath + "\\mineralJoined"
 oilGasJoined = folderPath + "\\oilGasJoined"
-amrJoined = folderPath + "\\amrJoined"
 
 # ======================================= Create Temporary Local Feature Layers =========================================
 
@@ -87,7 +81,6 @@ createFeatureLayer(testFireLayerLocation, testUtahFires, "irwin_POOState = 'US_U
 createFeatureLayer(coalLayerLocation, coalLocations, "")
 createFeatureLayer(mineralLayerLocation, mineralLocations, "")
 createFeatureLayer(oilgasLayerLocation, oilGasLocations, "")
-createFeatureLayer(amrLayerLocation, amrLocations, "")
 
 # ======================================== Beginning of Geoprocessing ===================================================
 # Be aware of feature layers with text cells exceeding 254 characters. They may be truncated or unable to write to the new feature class.
@@ -115,9 +108,6 @@ spatialJoinBuffers(mineralLocations, fireBuffers, mineralJoined, "INTERSECT")
 
 print("Joining oil and gas well locations to fire buffer layer")
 spatialJoinBuffers(oilGasLocations, fireBuffers, oilGasJoined, "INTERSECT")
-
-print("Joining abandoned mine locations to fire buffer layer")
-spatialJoinBuffers(amrLocations, fireBuffers, amrJoined, "INTERSECT")
 
 # ============================== Overwriting Hosted Feature Layers =====================================
 # Though overwriting the layers would be an option with the use of view layers as to not lose customizations like symbology and pop-ups, 
@@ -189,7 +179,6 @@ updateHosted(fireBuffers, fireBuffersItemId)
 updateHosted(coalJoined, coalJoinedItemId)
 updateHosted(mineralJoined, mineralJoinedItemId)
 updateHosted(oilGasJoined, oilGasJoinedItemId)
-updateHosted(amrJoined, amrJoinedItemId)
 
 endTime = process_time()
 elapsedTime = round((endTime-startTime)/60, 2)
