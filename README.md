@@ -21,7 +21,7 @@ This code:
 Estimated completion time: less than one minute
 
 ## Usage recommendations
-Create an executable from the python script then use Windows Task Scheduler to set the code to run as often as you choose. Make a determination based on how often the fire perimeter layer is updated. In Utah, they are updated often so I set the code to run every day. Windows Task Scheduler is not always reliable so it may be worth looking into other scheduling software or scheduling libraries. I have not strayed beyond Windows Task Scheduler. 
+Create an executable from the python script then use Windows Task Scheduler to set the code to run as often as you choose. [Here](https://datatofish.com/python-script-windows-scheduler/) is a great walkthrough of this process. Make a determination based on how often the fire perimeter layer is updated. In Utah, they are updated often so I set the code to run every day. Windows Task Scheduler is not always reliable so it may be worth looking into other scheduling software or scheduling libraries. I have not strayed beyond Windows Task Scheduler. 
 
 ### Room for Improvement
 * Use webhooks to run code automatically whenever there is change in fire perimeter size or status
