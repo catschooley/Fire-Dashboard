@@ -56,19 +56,6 @@ coalJoinedItemId = "ca42728a00ee421f88e2585b201edb3f"
 mineralJoinedItemId = "d0c45ddee4624854b3a7bacfd6a12b10"
 oilGasJoinedItemId = "d0b88683ea294d55bd39af95ae25f9c0"
 
-# ======================================== Output Shapefile Locations =====================================
-
-testUtahFires = folderPath + "utahFiresTest"
-utahFires = folderPath + "\\utahFires"
-fireBuffers = folderPath + "\\fireBuffers"
-coalLocations = folderPath + "\\coalLocations"
-mineralLocations = folderPath + "\\mineralLocations"
-oilGasLocations = folderPath + "\\oilGasLocations"
-
-coalJoined = folderPath + "\\coalJoined"
-mineralJoined = folderPath + "\\mineralJoined"
-oilGasJoined = folderPath + "\\oilGasJoined"
-
 # ======================================= Create Temporary Local Feature Layers =========================================
 
 def createFeatureLayer(inFeatures, outLayer, whereClause):
