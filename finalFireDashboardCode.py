@@ -25,7 +25,7 @@ arcpy.env.overwriteOutput = True
 portalURL = r'https://arcgis.com'
 username = 'cschooley_OGM'
 print("Enter Password: ")
-password = "Meow2rawR!"  #can be hardcoded, not recommended
+password = getpass()  #can be hardcoded, not recommended
 gis = GIS(portalURL, username, password)
 
 # ======================================== Input Hosted Feature Layers ======================================
