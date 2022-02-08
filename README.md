@@ -17,7 +17,7 @@ This code:
 * Pulls in Utah's Division of Oil, Gas, and Mining asset locations from AGOL
 * Spatially joins asset layers to fire perimeter layer
 * Updates existing feature layers with updated joins on AGOL
-* Creates CSVs for endangered assets within .1 mile and within fire perimeters
+* Creates CSVs for endangered assets within .1 mile and within fire perimeters (included fire incident name)
 * Emails interested parties with CSVs attached
 
 Estimated completion time: less than one minute
