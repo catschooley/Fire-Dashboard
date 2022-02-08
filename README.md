@@ -17,6 +17,8 @@ This code:
 * Pulls in Utah's Division of Oil, Gas, and Mining asset locations from AGOL
 * Spatially joins asset layers to fire perimeter layer
 * Updates existing feature layers with updated joins on AGOL
+* Creates CSVs for endangered assets within .1 mile and within fire perimeters
+* Emails interested parties with CSVs attached
 
 Estimated completion time: less than one minute
 
@@ -26,4 +28,4 @@ Create an executable from the python script then use Windows Task Scheduler to s
 ### Room for Improvement
 * Use webhooks to run code automatically whenever there is change in fire perimeter size or status
 * The append tool can be kind of slow. It might be worth using a different method to update the data, though I don't know of another way
-* Send emails to staff and\or management when certain conditions are met (number of assets affected, types of assets affected, etc.)
+* Filter assets sent to management by priority, asset types, etc. 
