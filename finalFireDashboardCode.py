@@ -1,6 +1,6 @@
 # fireDashboardScript.py
 # ===========================================
-# Date Modified: January 27, 2022
+# Date Modified: February 8, 2022
 # Author: Cat Schooley
 # ===========================================
 
@@ -13,6 +13,9 @@ from arcpy import env
 from arcgis.gis import GIS
 from getpass import getpass 
 from time import process_time
+import yagmail
+from datetime import date
+from datetime import datetime
 
 startTime = process_time()
 
@@ -212,7 +215,7 @@ for recipient in reciever:
     yag.send(
         to=recipient,
         subject='DOGM Assets in within Fire Perimeter',
-        attachments = [os.path.join(excelFolder, oilGasExcel)] #list the tables you want in the email
+        attachments = [os.path.join(excelFolder, oilGasExcel)], #list the tables you want in the email
         contents = body
     )
 
