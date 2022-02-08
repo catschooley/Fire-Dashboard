@@ -216,7 +216,7 @@ yag = yagmail.SMTP("email", 'password')
 for recipient in reciever:
     yag.send(
         to=recipient,
-        subject='DOGM Assets in within Fire Perimeter',
+        subject='DOGM Assets within Fire Perimeter',
         attachments = [os.path.join(excelFolder, oilGasExcel)], #list the tables you want in the email
         contents = body
     )
