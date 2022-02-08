@@ -94,6 +94,8 @@ arcpy.analysis.MultipleRingBuffer(Input_Features = UtahFires,
                                   Buffer_Unit = "Miles")
 
 # Stole this by using ArcPro and then copying the python command - could use Field Mapping object but with so many fields, this was easier
+# This is to join the fire incident name, incident type, and land jurisdiction information to the fire buffer layer. This allows that information to be
+# shared in the CSVs created later and in pop-ups within the dashboard
 arcpy.analysis.SpatialJoin(fireBuffers,
                            testUtahFires,
                            fireBuffersNames,
@@ -186,7 +188,7 @@ def updateHosted(fc, fsItemId):
     os.remove(os.path.join(arcpy.env.scratchFolder, "TempGDB.gdb.zip"))
 
 # Updating hosted feature layers
-updateHosted(fireBuffers, fireBuffersItemId)
+updateHosted(fireBuffersNames, fireBuffersItemId)
 updateHosted(coalJoined, coalJoinedItemId)
 updateHosted(mineralJoined, mineralJoinedItemId)
 updateHosted(oilGasJoined, oilGasJoinedItemId)
