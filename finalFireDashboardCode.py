@@ -12,6 +12,7 @@ from zipfile import ZipFile
 from arcpy import env
 from arcgis.gis import GIS
 from getpass import getpass 
+import time
 from time import process_time
 import yagmail
 from datetime import date
