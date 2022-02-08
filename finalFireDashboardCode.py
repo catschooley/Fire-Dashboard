@@ -194,15 +194,45 @@ updateHosted(amrJoined, amrJoinedItemId)
 
 #============================ Create Table & Send Emails =======================================
 
+# Create list of email attachments. The email attachments should only be for tables that aren't empty
+attachmentList = []
+
+# CSV file names
 coalExcel = 'endangeredCoal.csv'
 mineralExcel = 'endangeredMineral.csv'
 oilGasExcel = 'endangeredOilGas.csv'
 amrExcel = 'endangeredAMR.csv'
 
-arcpy.conversion.TableToTable(oilGasJoined, excelFolder, oilGasExcel , "distance = .1")
-arcpy.conversion.TableToTable(coalJoined, excelFolder, coalExcel , "distance = .1")
-arcpy.conversion.TableToTable(mineralJoined, excelFolder, mineralExcel , "distance = .1")
-arcpy.conversion.TableToTable(amrJoined, excelFolder, amrExcel , "distance = .1")
+# Get the row count for each joined asset layer
+coalCount = int(arcpy.GetCount_management(coalJoined).getOutput(0))
+mineralCount = int(arcpy.GetCount_management(mineralJoined).getOutput(0))
+oilGasCount = int(arcpy.GetCount_management(oilGasJoined).getOutput(0))
+amrCount = int(arcpy.GetCount_management(amrJoined).getOutput(0))
+
+# Check if the layer is empty. If it isn't, convert to CSV and add to email attachment list
+if coalCount < 1:
+    print("No coal assets within fire perimeters.")
+else:
+    arcpy.conversion.TableToTable(coalJoined, excelFolder, coalExcel , "distance = .1")
+    attachmentList.append(os.path.join(excelFolder, coalExcel))
+
+if mineralCount < 1:
+    print("No mineral assets within fire perimeters.")
+else:
+    arcpy.conversion.TableToTable(mineralJoined, excelFolder, mineralExcel , "distance = .1")
+    attachmentList.append(os.path.join(excelFolder, mineralExcel))
+    
+if oilGasCount < 1:
+    print("No oil and gas assets within fire perimeters.")
+else:
+    arcpy.conversion.TableToTable(oilGasJoined, excelFolder, oilGasExcel , "distance = .1")
+    attachmentList.append(os.path.join(excelFolder, oilGasExcel))
+    
+if amrCount < 1:
+    print("No abandoned mine assets within fire perimeters.")
+else:
+    arcpy.conversion.TableToTable(amrJoined, excelFolder, amrExcel , "distance = .1")
+    attachmentList.append(os.path.join(excelFolder, amrExcel))
 
 print("Sending Emails...")
 now = datetime.now()
@@ -215,7 +245,7 @@ for recipient in reciever:
     yag.send(
         to=recipient,
         subject='DOGM Assets within Fire Perimeter',
-        attachments = [os.path.join(excelFolder, oilGasExcel)], #list the tables you want in the email
+        attachments = attachmentList, 
         contents = body
     )
 
