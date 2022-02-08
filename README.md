@@ -20,7 +20,7 @@ This code:
 * Creates CSVs for endangered assets within .1 mile and within fire perimeters (included fire incident name)
 * Emails interested parties with CSVs attached
 
-Estimated completion time: less than one minute
+Estimated completion time: ~ 1 minute
 
 ## Usage recommendations
 Create an executable from the python script then use Windows Task Scheduler to set the code to run as often as you choose. [Here](https://datatofish.com/python-script-windows-scheduler/) is a great walkthrough of this process. Make a determination based on how often the fire perimeter layer is updated. In Utah, they are updated often so I set the code to run every day. Windows Task Scheduler is not always reliable so it may be worth looking into other scheduling software or scheduling libraries. I have not strayed beyond Windows Task Scheduler. 
