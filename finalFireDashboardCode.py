@@ -210,7 +210,7 @@ print("Sending Emails...")
 now = datetime.now()
 date = now.strftime("%m/%d/%Y")
 time = now.strftime("%I:%M:%S %p")
-reciever = ['email1@gmail.com', 'email2@gmail.com]
+reciever = ['email1@gmail.com', 'email2@gmail.com']
 body = f'Hello,\n\nThese are the DOGM assets that are within a fire perimeter. Please see attached file for a complete list.'
 yag = yagmail.SMTP("email", 'password')
 for recipient in reciever:
