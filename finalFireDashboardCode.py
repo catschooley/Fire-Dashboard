@@ -72,8 +72,6 @@ def createFeatureLayer(inFeatures, outLayer, whereClause):
 
 createFeatureLayer(fireLayerLocation, utahFires, "irwin_POOState = 'US_UT'")
 fireCount = int(arcpy.GetCount_management(utahFires).getOutput(0))
-print(fireCount)
-print(type(fireCount))
 if fireCount < 1:
     print("No fire boundaries in Utah at this time")
     sys.exit()
