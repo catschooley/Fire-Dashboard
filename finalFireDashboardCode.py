@@ -154,8 +154,15 @@ def updateHosted(fc, fsItemId):
     # Check if FGD exists, if True, delete item
     searchResults = gis.content.search(f'title:tempFGD AND owner:{username}', item_type='File Geodatabase')
     if len(searchResults) > 0:
-        item = searchResults[0]
-        item.delete()
+        # try\except block added to deal with lag time in fgdItem.delete()
+        # An error would occur where the previous temp FGD would be found in the search results, but then be 
+        # gone by the time the script tried to delete it
+        try:
+            item = searchResults[0]
+            item.delete()
+        except Exception as error: 
+            print(error)
+            pass
 
     # Upload zipped File Geodatabase
     print("Uploading File Geodatabase")
@@ -184,6 +191,10 @@ def updateHosted(fc, fsItemId):
     print("Deleting temporary FGD and zip file")
     arcpy.Delete_management(os.path.join(arcpy.env.scratchFolder, "TempGDB.gdb"))
     os.remove(os.path.join(arcpy.env.scratchFolder, "TempGDB.gdb.zip"))
+    
+    # Uncomment this line to 'pause' the script for one second so the fgdItem.delete() has time to complete 
+    # before the next layer is run through. Removes the need for the try\except block above. Whatever you prefer
+    # time.sleep(1) 
 
 # Updating hosted feature layers
 updateHosted(fireBuffersNames, fireBuffersItemId)
