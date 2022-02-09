@@ -71,7 +71,7 @@ def createFeatureLayer(inFeatures, outLayer, whereClause):
                                       where_clause = whereClause)
 
 
-createFeatureLayer(fireLayerLocation, utahFires, "irwin_POOState = 'US_UT'")
+createFeatureLayer(fireLayerLocation, utahFires, "irwin_POOState = 'US-UT'")
 fireCount = int(arcpy.GetCount_management(utahFires).getOutput(0))
 if fireCount < 1:
     print("No fire boundaries in Utah at this time")
@@ -96,7 +96,7 @@ arcpy.analysis.MultipleRingBuffer(Input_Features = UtahFires,
 # This is to join the fire incident name, incident type, and land jurisdiction information to the fire buffer layer. This allows that information to be
 # shared in the CSVs created later and in pop-ups within the dashboard
 arcpy.analysis.SpatialJoin(fireBuffers,
-                           testUtahFires,
+                           UtahFires,
                            fireBuffersNames,
                            "JOIN_ONE_TO_ONE",
                            "KEEP_ALL",
