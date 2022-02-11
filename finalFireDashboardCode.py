@@ -223,34 +223,35 @@ def countRows(folder, csv):
     results = pd.read_csv(location)
     return len(results)
 
-coalCount = countRows(excelFolder, coalExcel)
-mineralCount = countRows(excelFolder, mineralExcel)
-oilGasCount = countRows(excelFolder, oilGasExcel)
-amrCount = countRows(excelFolder, amrExcel)
+def countRows(lyr, folder, csv, distance):
+    arcpy.conversion.TableToTable(lyr, folder, csv , f"distance = {distance}")
+    location = os.path.join(folder, csv)
+    results = pd.read_csv(location)
+    return len(results)
 
-# Check if the layer is empty. If it isn't, convert to CSV and add to email attachment list. Could be turned into an excel with python if desired.
+coalCount = countRows(coalJoined, excelFolder, coalExcel, .1)
+mineralCount = countRows(mineralJoined, excelFolder, mineralExcel, .1)
+oilGasCount = countRows(oilGasJoined, excelFolder, oilGasExcel, .1)
+amrCount = countRows(amrJoined, excelFolder, amrExcel, .1)
+
 if coalCount < 1:
     print("No coal assets within fire perimeters.")
 else:
-    arcpy.conversion.TableToTable(coalJoined, excelFolder, coalExcel , "distance = .1")
     attachmentList.append(os.path.join(excelFolder, coalExcel))
 
 if mineralCount < 1:
     print("No mineral assets within fire perimeters.")
 else:
-    arcpy.conversion.TableToTable(mineralJoined, excelFolder, mineralExcel , "distance = .1")
     attachmentList.append(os.path.join(excelFolder, mineralExcel))
     
 if oilGasCount < 1:
     print("No oil and gas assets within fire perimeters.")
 else:
-    arcpy.conversion.TableToTable(oilGasJoined, excelFolder, oilGasExcel , "distance = .1")
     attachmentList.append(os.path.join(excelFolder, oilGasExcel))
     
 if amrCount < 1:
     print("No abandoned mine assets within fire perimeters.")
 else:
-    arcpy.conversion.TableToTable(amrJoined, excelFolder, amrExcel , "distance = .1")
     attachmentList.append(os.path.join(excelFolder, amrExcel))
 
 print("Sending Emails...")
