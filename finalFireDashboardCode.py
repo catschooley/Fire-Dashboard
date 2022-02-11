@@ -206,6 +206,8 @@ updateHosted(amrJoined, amrJoinedItemId)
 
 #============================ Create Table & Send Emails =======================================
 
+# BELOW THIS LINE IS A WORK IN PROGRESS
+
 # Create list of email attachments. The email attachments should only be for tables that aren't empty
 attachmentList = []
 
@@ -215,11 +217,16 @@ mineralExcel = 'endangeredMineral.csv'
 oilGasExcel = 'endangeredOilGas.csv'
 amrExcel = 'endangeredAMR.csv'
 
-# Get the row count for each joined asset layer
-coalCount = int(arcpy.GetCount_management(coalJoined).getOutput(0))
-mineralCount = int(arcpy.GetCount_management(mineralJoined).getOutput(0))
-oilGasCount = int(arcpy.GetCount_management(oilGasJoined).getOutput(0))
-amrCount = int(arcpy.GetCount_management(amrJoined).getOutput(0))
+# Returns number of rows in csv
+def countRows(folder, csv):
+    location = os.path.join(folder, csv)
+    results = pd.read_csv(location)
+    return len(results)
+
+coalCount = countRows(excelFolder, coalExcel)
+mineralCount = countRows(excelFolder, mineralExcel)
+oilGasCount = countRows(excelFolder, oilGasExcel)
+amrCount = countRows(excelFolder, amrExcel)
 
 # Check if the layer is empty. If it isn't, convert to CSV and add to email attachment list. Could be turned into an excel with python if desired.
 if coalCount < 1:
