@@ -207,6 +207,10 @@ updateHosted(amrJoined, amrJoinedItemId)
 #============================ Create Table & Send Emails =======================================
 
 # BELOW THIS LINE IS A WORK IN PROGRESS
+# Current workflow creates a table and then counts the rows. Ideally one could use SelectLayerByAttribute and GetCount to determine if a table
+# should be created at all. Currently having some issues there but this is an allowable workaround given the small number of tables. This would
+# not be allowable for many tables as it would take too much time and create electronic waste in the form of empty tables saved to the machine
+# Will continue working on this as time permits
 
 # Create list of email attachments. The email attachments should only be for tables that aren't empty
 attachmentList = []
