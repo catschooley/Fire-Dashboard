@@ -78,6 +78,7 @@ if fireCount < 1:
     sys.exit()
 createFeatureLayer(coalLayerLocation, coalLocations, "")
 createFeatureLayer(mineralLayerLocation, mineralLocations, "")
+arcpy.management.CalculateField(mineralLocations, "M_Status", "Mine_Status", "SQL", '', "TEXT", "NO_ENFORCE_DOMAINS") # one of the field names truncate, fixes this by calculating a new field
 createFeatureLayer(oilgasLayerLocation, oilGasLocations, "")
 createFeatureLayer(amrLayerLocation, amrLocations, "")
 
