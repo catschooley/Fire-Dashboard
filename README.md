@@ -19,6 +19,7 @@ This code:
 * Spatially joins asset layers to fire perimeter layer
 * Updates existing feature layers with updated joins on AGOL
 * Creates CSVs for endangered assets within .1 mile and within fire perimeters (included fire incident name)
+* Allows users to download table data of assets and the fires they are near\within
 * Emails interested parties with CSVs attached
 
 Estimated completion time: ~ 1 minute
