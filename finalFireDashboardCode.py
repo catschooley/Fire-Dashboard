@@ -17,6 +17,7 @@ from time import process_time
 import yagmail
 from datetime import date
 from datetime import datetime
+import pandas as pd
 
 startTime = process_time()
 
@@ -44,7 +45,8 @@ amrLayerLocation = "https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/ser
 
 utahFires = folderPath + "\\utahFires"
 fireBuffers = folderPath + "\\fireBuffers"
-fireBuffersNames = folderPath + "\\fireBuffersNames"
+fireInfo = folderPath + "\\fireInfo"
+fireBufferInfo = folderPath + "\\fireBufferInfo"
 coalLocations = folderPath + "\\coalLocations"
 mineralLocations = folderPath + "\\mineralLocations"
 oilGasLocations = folderPath + "\\oilGasLocations"
@@ -78,9 +80,16 @@ if fireCount < 1:
     sys.exit()
 createFeatureLayer(coalLayerLocation, coalLocations, "")
 createFeatureLayer(mineralLayerLocation, mineralLocations, "")
-arcpy.management.CalculateField(mineralLocations, "M_Status", "Mine_Status", "SQL", '', "TEXT", "NO_ENFORCE_DOMAINS") # one of the field names truncate, fixes this by calculating a new field
+# arcpy.management.CalculateField(mineralLocations, "M_Status", "Mine_Status", "SQL", '', "TEXT", "NO_ENFORCE_DOMAINS") # one of the field names truncate, fixes this by calculating a new field
 createFeatureLayer(oilgasLayerLocation, oilGasLocations, "")
 createFeatureLayer(amrLayerLocation, amrLocations, "")
+
+# Create fire information layer to join with fire buffer layer
+fireSdf = pd.DataFrame.spatial.from_featureclass(utahFires)
+fireSdf = fireSdf.rename(columns = {"poly_IncidentName": "fireName", "irwin_IncidentTypeCategory": "incType", "irwin_POOJurisdictionalAgency": "agency"})
+fireSdf = fireSdf[["fireName", "incType", "agency", "SHAPE"]]
+fireSdf.spatial.to_featureclass(location = fireInfo)
+createFeatureLayer(folderPath + "\\fireInfo.shp", fireInfo, "")
 
 # ======================================== Beginning of Geoprocessing ===================================================
 # Be aware of feature layers with text cells exceeding 254 characters. They may be truncated or unable to write to the new feature class.
@@ -93,22 +102,16 @@ arcpy.analysis.MultipleRingBuffer(Input_Features = UtahFires,
                                   Distances = [0.1, 1, 5],
                                   Buffer_Unit = "Miles")
 
-# Stole this by using ArcPro and then copying the python command - could use Field Mapping object but with so many fields, this was easier
-# This is to join the fire incident name, incident type, and land jurisdiction information to the fire buffer layer. This allows that information to be
-# shared in the CSVs created later and in pop-ups within the dashboard
-arcpy.analysis.SpatialJoin(fireBuffers,
-                           UtahFires,
-                           fireBuffersNames,
-                           "JOIN_ONE_TO_ONE",
-                           "KEEP_ALL",
-                           'distance "distance" true true false 19 Double 0 0,First,#,fireBuffers,distance,-1,-1;poly_IncidentName "Incident Name (Polygon)" true true false 50 Text 0 0,First,#,testingFireperimeters,poly_IncidentName,0,50;irwin_IncidentTypeCategory "Incident Type Category" true true false 2 Text 0 0,First,#,testingFireperimeters,irwin_IncidentTypeCategory,0,2;irwin_POOJurisdictionalAgency "POO Jurisdictional Agency" true true false 50 Text 0 0,First,#,testingFireperimeters,irwin_POOJurisdictionalAgency,0,50', "WITHIN_A_DISTANCE", "5 Miles", '')
-
-# Function for creating buffers
-def spatialJoinBuffers(targetFeatures, joinFeatures, outFeatureClass, matchOption):
+# Function for joining layers to buffers
+def spatialJoinBuffers(targetFeatures, joinFeatures, outFeatureClass, matchOption, searchRadius):
     arcpy.analysis.SpatialJoin(target_features = targetFeatures,
                                join_features = joinFeatures,
                                out_feature_class = outFeatureClass,
-                               match_option = matchOption)
+                               match_option = matchOption,
+                               search_radius = searchRadius)
+
+print("Joining fire buffer layer to fire information layer")    
+spatialJoinBuffers(fireBuffers, fireInfo, fireBufferInfo, "INTERSECT", "5 Miles")
 
 print("Joining coal mine locations to fire buffer layer")    
 spatialJoinBuffers(coalLocations, fireBuffersNames, coalJoined, "INTERSECT")
@@ -199,7 +202,7 @@ def updateHosted(fc, fsItemId):
     # time.sleep(1) 
 
 # Updating hosted feature layers
-updateHosted(fireBuffersNames, fireBuffersItemId)
+updateHosted(fireBufferInfo, fireBuffersItemId)
 updateHosted(coalJoined, coalJoinedItemId)
 updateHosted(mineralJoined, mineralJoinedItemId)
 updateHosted(oilGasJoined, oilGasJoinedItemId)
